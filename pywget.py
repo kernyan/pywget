@@ -11,12 +11,8 @@ url = 'neverssl.com/index.html'
 
 path = 'GET {} HTTP/1.1'
 domain = 'Host: {}'
-cache_c = 'Cache-Control: max-age=0\r\nUpgrade-Insecure-Requests: 1'
-user_a = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36'
-others = 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
-#encoding = 'Accept-Encoding: gzip, deflate'
 encoding = 'Accept-Encoding: identity'
-others2 = 'Accept-Language: en-US,en;q=0.9\r\nConnection: close\r\n\r\n'
+others = 'Accept-Language: en-US\r\nConnection: close\r\n\r\n'
 
 class pyreq():
 	def __init__(self):
@@ -30,7 +26,7 @@ class pyreq():
 		self.path = url[a.end():]
 		d = domain.format(self.domain)
 		p = path.format(self.path)
-		self.req = '\r\n'.join([p, d, cache_c, user_a, others, encoding, others2])
+		self.req = '\r\n'.join([p, d, encoding, others])
 		return self.req
 
 if __name__ == '__main__':

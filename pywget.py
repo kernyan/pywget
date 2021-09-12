@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 
-#import requests
 import re
 import socket
 import time
+import sys
 
-url = 'neverssl.com/index.html'
+#url = 'neverssl.com/index.html'
 
 # header from Burp suite
 
@@ -15,49 +15,54 @@ encoding = 'Accept-Encoding: identity'
 others = 'Accept-Language: en-US\r\nConnection: close\r\n\r\n'
 
 class pyreq():
-	def __init__(self):
-		self.name = 'pyref'
-		self.domain = ''
-		self.path = ''
+  def __init__(self):
+    self.name = 'pyref'
+    self.domain = ''
+    self.path = ''
 
-	def geturl(self, url):
-		a = re.search(r'com', url)
-		self.domain = url[:a.end()]
-		self.path = url[a.end():]
-		d = domain.format(self.domain)
-		p = path.format(self.path)
-		self.req = '\r\n'.join([p, d, encoding, others])
-		return self.req
+  def geturl(self, url):
+    a = re.search(r'com', url)
+    self.domain = url[:a.end()]
+    self.path = url[a.end():] if url[a.end():] else '/'
+    d = domain.format(self.domain)
+    p = path.format(self.path)
+    self.req = '\r\n'.join([p, d, encoding, others])
+    return self.req
 
 if __name__ == '__main__':
-	req = pyreq()
-	a = req.geturl(url)
+  req = pyreq()
 
-	ai = socket.getaddrinfo(req.domain, 80, 
-		family=socket.AF_INET, 
-		type=socket.SOCK_STREAM,
-		proto=socket.IPPROTO_TCP)
+  if len(sys.argv) < 2:
+    print('usage: pywget "url"')
+    exit(0)
 
-	if len(ai) == 0:
-		print('no valid address info for {}'.format(url))
-		exit(-1)
+  url = sys.argv[1]
+  a = req.geturl(url)
 
-	af, socktype, proto, cannonname, sa = ai[0]
+  ai = socket.getaddrinfo(req.domain, 80, 
+    family=socket.AF_INET, 
+    type=socket.SOCK_STREAM,
+    proto=socket.IPPROTO_TCP)
 
-	s = socket.socket(af, socktype, proto)
-	s.connect(sa)
+  if len(ai) == 0:
+    print('no valid address info for {}'.format(url))
+    exit(-1)
 
-	s.send(str.encode(a))
+  af, socktype, proto, cannonname, sa = ai[0]
 
-	response = ''
-	in_chunk = ''
+  s = socket.socket(af, socktype, proto)
+  s.connect(sa)
 
-	while True:
-		in_chunk = s.recv(10000).decode('utf-8')
-		if not in_chunk:
-			break
-		response += in_chunk
+  s.send(str.encode(a))
 
-	a = re.search(r'\r\n\r\n', response)
-	print(response[a.end():-1])
+  response = ''
+  in_chunk = ''
 
+  while True:
+    in_chunk = s.recv(10000).decode('utf-8')
+    if not in_chunk:
+      break
+    response += in_chunk
+
+  a = re.search(r'\r\n\r\n', response)
+  print(response[a.end():-1])

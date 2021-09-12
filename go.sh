@@ -1,6 +1,6 @@
 #! /bin/bash
 
-./pywget.py > out.html
+./pywget.py "neverssl.com" > out.html
 
 if [ -f "index.html" ];
 then

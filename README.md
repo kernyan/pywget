@@ -1,6 +1,11 @@
 # pywget
 wget in python using as low-level syscall as possible. Practically useless, just for educational purpose
 
+## restrictions
+- tcp only
+- no ssl
+- no gzip decompression
+
 ## outline
 1. get available target ip, port, protocol (UDP, TCP), family (IPv4, IPv6)
   underlying syscall - man 3 getaddrinfo
@@ -21,5 +26,9 @@ wget in python using as low-level syscall as possible. Practically useless, just
         Sec-WebSocket-Protocol: chat, superchat
         Sec-WebSocket-Version: 13
 
+## run test
+compares wget "neverssl.com" output with pywget "neverssl.com"
 
-
+```bash
+./go.sh
+```

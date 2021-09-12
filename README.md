@@ -1,6 +1,5 @@
 # pywget
-wget in python using as low-level syscall as possible
-practically useless, just for educational purpose
+wget in python using as low-level syscall as possible. Practically useless, just for educational purpose
 
 ## outline
 1. get available target ip, port, protocol (UDP, TCP), family (IPv4, IPv6)
